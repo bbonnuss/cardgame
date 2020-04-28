@@ -5,18 +5,20 @@ from os.path import join
 # -1 = exit game
 # 0 = main menu
 # 1 = game selection
-# 2 = pok menu
+# 2 = pok game
 #
 # Loader ======================= Loader ======================= Loader
 class Sound_Loader():
     def __init__(self):
-        self.farm_theme = None #pygame.mixer.Sound(join('resouce',''))
+        self.main_menu = pygame.mixer.Sound(join('resource','main_theme.wav'))
 
 
 class Image_Loader():
     def __init__(self):
-        self.pok_bg = pygame.image.load(join('resource','pok_bg.png')).convert_alpha()
         self.main_bg = pygame.image.load(join('resource','main_bg.png')).convert_alpha()
+        self.selection_bg = pygame.image.load(join('resource','Selection.png')).convert_alpha()
+        self.pok_bg = pygame.image.load(join('resource','pok_bg.png')).convert_alpha()
+        self.bg = pygame.image.load(join('resource','bg.png')).convert_alpha()
 
 # Function ======================= Function ======================= Function
 def is_hit_box(position,box_a,box_b):
@@ -36,12 +38,17 @@ class Menu_Controller():
     def __init__(self):
         self.main_menu = Main_Menu()
         self.game_selection_menu = Game_Selection_Menu()
-        self.pok_game_menu = Pok_Game_Menu
+        self.pok_game_menu = Pok_Game_Menu()
     
 
     def main(self):
-        self.main_menu.run()
+        return self.main_menu.run()
 
+    def selection(self):
+        return self.game_selection_menu.run()
+    
+    def pok(self):
+        return self.pok_game_menu.run()
 
 class Menu():   
     def __init__(self):
@@ -50,30 +57,42 @@ class Menu():
         global resolution
 
         self.background = None
-        self.sound = None
+        self.theme_song = None
+        self.name = None
 
-
-class Main_Menu(Menu):
-    def __init__(self):
-        self.background = loaded_image.main_bg
-        self.start_button = (215,345),(600,420)
-        self.exit_button = (215,450),(600,515)
-        
-    
     def run(self):
-        # set title
-        pygame.display.set_caption("Card Game : "+"Main Menu")
-
-        # loop per second 
-        clock = pygame.time.Clock()
+         # set title
+        pygame.display.set_caption("Card Game : "+ self.name)
 
         # วาดพื้นหลัง
         self.draw_bg()
         pygame.display.update()
 
         # music theme (ต้อง load ใหม่ เพื่อเปิดเสียงแยกจาก effect)
-        #pygame.mixer.music.load(join('assets','sound','Get_Outside_farm.wav'))
-        #pygame.mixer.music.play(loops=-1)
+        pygame.mixer.music.load(self.theme_song)
+        pygame.mixer.music.set_volume(0.25)
+        pygame.mixer.music.play(loops=-1)
+    
+
+    def draw_bg(self):
+        
+        # background 
+        window.blit(pygame.transform.scale(self.background, resolution), (0, 0))
+
+class Main_Menu(Menu):
+    def __init__(self):
+        self.name = "Main Menu"
+        self.theme_song = join('resource','main_theme.wav')
+        self.background = loaded_image.main_bg
+        self.start_button = (215,345),(600,420)
+        self.exit_button = (215,450),(600,515)
+
+    
+    def run(self):
+        super().run()
+        
+        # loop per second 
+        clock = pygame.time.Clock()
 
         while True:
             # loop per second 
@@ -111,10 +130,6 @@ class Main_Menu(Menu):
                         return -1
 
 
-    def draw_bg(self):
-        # background 
-        window.blit(pygame.transform.scale(self.background, resolution), (0, 0))
-
 
 
         
@@ -122,7 +137,7 @@ class Main_Menu(Menu):
 
 class Game_Selection_Menu(Menu):
     def __init__(self):
-        self.background = None
+        self.background = loaded_image.selection_bg
 
     def run(self):
         return None
@@ -147,8 +162,18 @@ class deck():
 
 # Main ======================= Main ======================= Main
 def main():
+
     menu = Menu_Controller()
-    menu.main()
+    # start at main menu
+    go = menu.main()
+    while go != -1:
+        if go == 0:
+            go = menu.main()
+        elif go == 1:
+            go = menu.selection()
+        elif go == 2:
+            go = menu.pok()
+
 
 
 # Launcher ======================= Launcher ======================= Launcher 
