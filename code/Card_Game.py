@@ -20,6 +20,10 @@ class Image_Loader():
         self.selection_bg = pygame.image.load(join('resource','Selection.png')).convert_alpha()
         self.pok_bg = pygame.image.load(join('resource','pok_bg.png')).convert_alpha()
         self.bg = pygame.image.load(join('resource','bg.png')).convert_alpha()
+        self.credit1 = pygame.image.load(join('resource','credit1.png')).convert_alpha()
+        self.credit2 = pygame.image.load(join('resource','credit2.png')).convert_alpha()
+        self.credit_back = pygame.image.load(join('resource','credit_back.png')).convert_alpha()
+        self.credit_next = pygame.image.load(join('resource','credit_next.png')).convert_alpha()
 
 # Function ======================= Function ======================= Function
 def is_hit_box(position,box_a,box_b):
@@ -132,11 +136,11 @@ class Main_Menu(Menu):
                     if clickdown:
                         return -1
                 
-                # exit Button (exit game)
-                if is_hit_box(mouse_pos,self.exit_button[0], self.exit_button[1]):
-                    #print ("exit game")
+                # credit Button (exit game)
+                if is_hit_box(mouse_pos,self.credit_button[0], self.credit_button[1]):
+                    #print ("credit")
                     if clickdown:
-                        return 9
+                        return 32
 
 
 class Credit_Menu(Menu):
@@ -144,12 +148,94 @@ class Credit_Menu(Menu):
         self.name = "Credit"
         self.background = loaded_image.bg
         self.theme_song = None
+        self.page = 1
 
-        self.next_button = (0,0),(0,0)
-        self.back_button = (0,0),(0,0)
+        self.next_button = (550,500),(700,570)
+        self.back_button = (100,500),(250,570)
+    
+    def run(self):
+        super().run()
+        
+        # loop per second 
+        clock = pygame.time.Clock()
 
-    def draw_page1(self):
-        return None
+        # draw credit page
+        self.draw_page()
+        pygame.display.update()
+
+        while True:
+            # loop per second 
+            clock.tick(40)
+
+            
+
+            # input - output
+            for event in pygame.event.get():
+
+                # pointer
+                mouse_pos = pygame.mouse.get_pos()
+                print (mouse_pos)
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    clickdown = True
+                else:
+                    clickdown = False
+                
+                    
+                # exit
+                if event.type == pygame.QUIT:
+                    # stop theme song
+                    pygame.mixer.music.stop()
+                    pygame.quit()
+                
+                # Botton ------------------------- Botton
+                # next Button
+                if is_hit_box(mouse_pos,self.next_button[0], self.next_button[1]):
+                    print ("nextpage")
+                    if clickdown:
+                        if self.page == 1:
+                            self.page += 1
+
+                             # draw credit page
+                            self.draw_bg()
+                            self.draw_page()
+                            pygame.display.update()
+
+                # back Button (main menu)
+                if is_hit_box(mouse_pos,self.back_button[0], self.back_button[1]):
+                    print ("back")
+                    if clickdown:
+                        if self.page == 1:
+                            return 0
+                        else:
+                            self.page -= 1
+                            
+                            # draw credit page
+                            self.draw_bg()
+                            self.draw_page()
+                            pygame.display.update()
+
+
+    def draw_page(self): # draw text , next&back button
+        if self.page == 1:
+            # text
+            window.blit(pygame.transform.scale(loaded_image.credit1, (600,400)), (100, 50))
+            # back button
+            window.blit(pygame.transform.scale(loaded_image.credit_back, (150, 70)), self.back_button[0])
+            # next button
+            window.blit(pygame.transform.scale(loaded_image.credit_next, (150, 70)), self.next_button[0])
+
+        elif self.page == 2:
+            # text
+            window.blit(pygame.transform.scale(loaded_image.credit2, (600,400)), (100, 50))
+            # back button
+            window.blit(pygame.transform.scale(loaded_image.credit_back, (150, 70)), self.back_button[0])
+            
+        
+        
+
+
+        
 
 class Game_Selection_Menu(Menu):
     def __init__(self):        
