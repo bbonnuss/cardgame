@@ -82,8 +82,8 @@ class Menu():
 class Main_Menu(Menu):
     def __init__(self):
         self.name = "Main Menu"
-        self.theme_song = join('resource','main_theme.wav')
         self.background = loaded_image.main_bg
+        self.theme_song = join('resource','main_theme.wav')
         self.start_button = (215,345),(600,420)
         self.exit_button = (215,450),(600,515)
 
@@ -136,11 +136,54 @@ class Main_Menu(Menu):
 
 
 class Game_Selection_Menu(Menu):
-    def __init__(self):
+    def __init__(self):        
+        self.name = "Game Selection"
         self.background = loaded_image.selection_bg
+        self.theme_song = join('resource','main_theme.wav')
+        
+        self.pok_button = (215,345),(600,420)
+        self.exit_button = (215,450),(600,515)
 
     def run(self):
-        return None
+        super().run()
+        
+        # loop per second 
+        clock = pygame.time.Clock()
+
+        while True:
+            # loop per second 
+            clock.tick(40)
+
+            # input - output
+            for event in pygame.event.get():
+
+                # pointer
+                mouse_pos = pygame.mouse.get_pos()
+                print (mouse_pos)
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    clickdown = True
+                else:
+                    clickdown = False
+                
+                    
+                # exit
+                if event.type == pygame.QUIT:
+                    # stop theme song
+                    pygame.mixer.music.stop()
+                    pygame.quit()
+                
+                # Botton ------------------------- Botton
+
+                # start Button (to game selection)
+                if is_hit_box(mouse_pos,self.start_button[0], self.start_button[1]):
+                    if clickdown:
+                        return 1
+                
+                # exit Button (exit game)
+                if is_hit_box(mouse_pos,self.exit_button[0], self.exit_button[1]):
+                    if clickdown:
+                        return -1
 
 
 class Pok_Game_Menu(Menu):
