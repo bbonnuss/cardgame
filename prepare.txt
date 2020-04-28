@@ -1,3 +1,6 @@
 install python
 open cmd
 "pip install pygame" 
+"pip show pygame"
+check version  of pygame
+"pip install numpy" 
