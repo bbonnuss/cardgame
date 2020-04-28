@@ -56,8 +56,9 @@ class Menu():
 class Main_Menu(Menu):
     def __init__(self):
         self.background = loaded_image.main_bg
-        self.start_button = (0,0),(0,0)
-        self.exit_button = (0,0),(0,0)
+        self.start_button = (215,345),(600,420)
+        self.exit_button = (215,450),(600,515)
+        
     
     def run(self):
         # set title
@@ -83,7 +84,7 @@ class Main_Menu(Menu):
 
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
-                #print (mouse_pos)
+                print (mouse_pos)
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     clickdown = True
