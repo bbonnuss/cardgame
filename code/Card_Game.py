@@ -1,6 +1,12 @@
 import pygame
 from os.path import join
 
+# return value
+# -1 = exit game
+# 0 = main menu
+# 1 = game selection
+# 2 = pok menu
+#
 # Loader ======================= Loader ======================= Loader
 class Sound_Loader():
     def __init__(self):
@@ -33,8 +39,8 @@ class Menu_Controller():
         self.pok_game_menu = Pok_Game_Menu
     
 
-    def main():
-        Main_Menu.run()
+    def main(self):
+        self.main_menu.run()
 
 
 class Menu():   
@@ -53,9 +59,12 @@ class Main_Menu(Menu):
         self.start_button = (0,0),(0,0)
         self.exit_button = (0,0),(0,0)
     
-    def run():
+    def run(self):
         # set title
         pygame.display.set_caption("Card Game : "+"Main Menu")
+
+        # loop per second 
+        clock = pygame.time.Clock()
 
         # วาดพื้นหลัง
         self.draw_bg()
@@ -65,12 +74,47 @@ class Main_Menu(Menu):
         #pygame.mixer.music.load(join('assets','sound','Get_Outside_farm.wav'))
         #pygame.mixer.music.play(loops=-1)
 
-        while run:
-            if 
-    
-    def draw_bg():
+        while True:
+            # loop per second 
+            clock.tick(40)
+
+            # input - output
+            for event in pygame.event.get():
+
+                # pointer
+                mouse_pos = pygame.mouse.get_pos()
+                #print (mouse_pos)
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    clickdown = True
+                else:
+                    clickdown = False
+                
+                    
+                # exit
+                if event.type == pygame.QUIT:
+                    # stop theme song
+                    pygame.mixer.music.stop()
+                    pygame.quit()
+                
+                # Botton ------------------------- Botton
+
+                # start Button (to game selection)
+                if is_hit_box(mouse_pos,self.start_button[0], self.start_button[1]):
+                    if clickdown:
+                        return 1
+                
+                # exit Button (exit game)
+                if is_hit_box(mouse_pos,self.exit_button[0], self.exit_button[1]):
+                    if clickdown:
+                        return -1
+
+
+    def draw_bg(self):
         # background 
-        window.blit(pygame.transform.scale(self.background, self.resolution), (0, 0))
+        window.blit(pygame.transform.scale(self.background, resolution), (0, 0))
+
+
 
         
 
@@ -79,7 +123,7 @@ class Game_Selection_Menu(Menu):
     def __init__(self):
         self.background = None
 
-    def run():
+    def run(self):
         return None
 
 
@@ -87,7 +131,7 @@ class Pok_Game_Menu(Menu):
     def __init__(self):
         self.background = None
 
-    def run():
+    def run(self):
         return None
 
 # Mechanic ======================= Mechanic
@@ -97,12 +141,13 @@ class deck():
         # data
         self.card = list()
     
-    def suffle():
+    def suffle(self):
         return None
 
 # Main ======================= Main ======================= Main
 def main():
     menu = Menu_Controller()
+    menu.main()
 
 
 # Launcher ======================= Launcher ======================= Launcher 
