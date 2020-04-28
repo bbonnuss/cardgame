@@ -41,6 +41,8 @@ class Menu():
     def __init__(self):
         global loaded_image
         global loaded_sound
+        global resolution
+
         self.background = None
         self.sound = None
 
@@ -52,10 +54,8 @@ class Main_Menu(Menu):
         self.exit_button = (0,0),(0,0)
     
     def run():
+        # set title
         pygame.display.set_caption("Card Game : "+"Main Menu")
-
-        # loop per second 
-        clock = pygame.time.Clock()
 
         # วาดพื้นหลัง
         self.draw_bg()
@@ -67,6 +67,10 @@ class Main_Menu(Menu):
 
         while run:
             if 
+    
+    def draw_bg():
+        # background 
+        window.blit(pygame.transform.scale(self.background, self.resolution), (0, 0))
 
         
 
