@@ -411,6 +411,119 @@ class Deck():
     def suffle(self):
         return None
 
+
+class Card():
+    def __init__(self)
+        self.image = None
+        self.num = -1
+        self.suit = -1
+        self.char = None
+    
+    def get_num(self):
+        return self.num
+    
+    def get_suit(self):
+        return self.suit
+    
+    def get_image(self):
+        return self.image
+
+    def is_char(self):
+        return self.char
+
+
+class spd_A(Card):
+    def __init__(self):
+        self.image = loaded_image.spd_A
+        self.num = 1
+        self.suit = 4
+        self.char = True
+
+class spd_2(Card):
+    def __init__(self):
+        self.image = loaded_image.spd_2
+        self.num = 2
+        self.suit = 4
+        self.char = False
+
+class spd_3(Card):
+    def __init__(self):
+        self.image = loaded_image.spd_3
+        self.num = 3
+        self.suit = 4
+        self.char = False
+
+class spd_4(Card):
+    def __init__(self):
+        self.image = loaded_image.spd_4
+        self.num = 4
+        self.suit = 4
+        self.char = False
+
+class spd_5(Card):
+    def __init__(self):
+        self.image = loaded_image.spd_5
+        self.num = 5
+        self.suit = 4
+        self.char = False
+
+class spd_6(Card):
+    def __init__(self):
+        self.image = loaded_image.spd_6
+        self.num = 6
+        self.suit = 4
+        self.char = False
+
+class spd_7(Card):
+    def __init__(self):
+        self.image = loaded_image.spd_7
+        self.num = 7
+        self.suit = 4
+        self.char = False
+
+class spd_8(Card):
+    def __init__(self):
+        self.image = loaded_image.spd_8
+        self.num = 8
+        self.suit = 4
+        self.char = False
+
+class spd_9(Card):
+    def __init__(self):
+        self.image = loaded_image.spd_9
+        self.num = 9
+        self.suit = 4
+        self.char = False
+
+class spd_10(Card):
+    def __init__(self):
+        self.image = loaded_image.spd_10
+        self.num = 10
+        self.suit = 4
+        self.char = False
+
+class spd_J(Card):
+    def __init__(self):
+        self.image = loaded_image.spd_J
+        self.num = 0
+        self.suit = 4
+        self.char = True
+
+class spd_Q(Card):
+    def __init__(self):
+        self.image = loaded_image.spd_Q
+        self.num = 0
+        self.suit = 4
+        self.char = True
+
+class spd_K(Card):
+    def __init__(self):
+        self.image = loaded_image.spd_K
+        self.num = 0
+        self.suit = 4
+        self.char = True
+
+
 class Player():
     def __init__(self, bot=False):
         self.hand_card = list()
@@ -421,34 +534,67 @@ class Player():
     def draw(self, card):
         self.hand_card.append(card)
         self.num += 1
+        self.hand_card.sort()
     
     def clear_hand(self):
         self.hand_card = list()
         self.num = 0
     
     def get_point(self):
-        # return tuple num point
+        # return int 
         point = 0
         for card in self.hand_card:
-            point += (card.num%10)
+            point += (card.get_num()%10)
 
         return point
 
 
-    def is_tong(self):
-        suit = get_suit()
+    def is_straight(self): # ไพ่เรียง? 
+        # return true when 3 card are straight
+        if self.num == 3:
+            if self.hand_card[1].get_num()-self.hand_card[0].get_num() == 1:
+                if self.hand_card[2].get_num()-self.hand_card[1].get_num() == 1:
+                    return True
+        return False
+
+    def is_flood(self):
+        # return true when 3 card are the same suit
+        if self.num < 3:
+            return False
+        suit_list = self.get_suit()
         for i in range(0,self.num-1,1):
-            if suit[i] != suit[i+1]:
+            if suit_list[i] != suit_list[i+1]:
+                return False
+        return True        
+
+
+    def is_tong(self):
+        # return true when 3 card are the same number
+        if self.num < 3:
+            return False
+        num_list = self.get_num()
+        for i in range(0,self.num-1,1):
+            if num_list[i] != num_list[i+1]:
                 return False
         return True        
 
     def get_suit(self):
+        # return list of suit
         suit = list()
         i=0
         for card in self.hand_card:
-            suit[i] = card.suit
+            suit[i] = card.get_suit()
             i += 1
         return suit
+    
+    def get_num(self):
+        # return list of num
+        num = list()
+        i=0
+        for card in self.hand_card:
+            num[i] = card.get_num()
+            i += 1
+        return num
 
     def is_draw(self):
         if self.bot :
