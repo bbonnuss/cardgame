@@ -422,6 +422,7 @@ class Pok_Game_Menu(Menu):
                     #print ("start")
                     if clickdown:
                         self.game_state += 1
+                        self.draw_deck = Deck()
                         
                 
                 #  draw Button
@@ -440,9 +441,9 @@ class Pok_Game_Menu(Menu):
                 if is_hit_box(mouse_pos,self.suffle_button[0], self.suffle_button[1]) and False:    # not use for now
                     #print ("suffle")
                     if clickdown:
-                        print ("suffle")
+                        self.draw_deck.shuffle()
 
-                # finish Button (main menu)
+                # finish Button (static display)
                 if is_hit_box(mouse_pos,self.exit_button[0], self.exit_button[1]) and self.game_state == 6:
                     #print ("back")
                     if clickdown:
@@ -459,17 +460,23 @@ class Pok_Game_Menu(Menu):
 # Mechanic ======================= Mechanic
 
 class Deck():
-    def __init__(self):
+    def __init__(self, suffle=True):
         # data
         self.card = [spd_A(), spd_2(), spd_3(),spd_4(), spd_5(), spd_6(), spd_7(), spd_8(), spd_9(), spd_10(), spd_J(), spd_Q(), spd_K(),
                     hrt_A(), hrt_2(), hrt_3(),hrt_4(), hrt_5(), hrt_6(), hrt_7(), hrt_8(), hrt_9(), hrt_10(), hrt_J(), hrt_Q(), hrt_K(),
                     dmd_A(), dmd_2(), dmd_3(),dmd_4(), dmd_5(), dmd_6(), dmd_7(), dmd_8(), dmd_9(), dmd_10(), dmd_J(), dmd_Q(), dmd_K(),
                     cub_A(), cub_2(), cub_3(),cub_4(), cub_5(), cub_6(), cub_7(), cub_8(), cub_9(), cub_10(), cub_J(), cub_Q(), cub_K()]
-    
-    def shuffle(self):
+        if suffle:
+            self.shuffle()
+
+
+    def shuffle(self): # สับ deck
         shuffle(self.card)
     
-    def draw
+    def draw_out(self):
+        if len(self.card) > 0:
+            return self.card.pop(0)
+        return None 
 
 
 class Card():
