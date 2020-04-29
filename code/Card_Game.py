@@ -1,5 +1,6 @@
 import pygame
 from os.path import join
+from numpy.random import choice
 
 # return value
 # -1 = exit game
@@ -333,7 +334,7 @@ class Pok_Game_Menu(Menu):
 
         while True:
             # loop per second 
-            clock.tick(40)
+            clock.tick(50)
 
             
             self.draw_bg()      # draw_bg
@@ -409,6 +410,56 @@ class Deck():
     
     def suffle(self):
         return None
+
+class Player():
+    def __init__(self, bot=False):
+        self.hand_card = list()
+        self.bot = bot
+        self.num = 0
+    
+
+    def draw(self, card):
+        self.hand_card.append(card)
+        self.num += 1
+    
+    def clear_hand(self):
+        self.hand_card = list()
+        self.num = 0
+    
+    def get_point(self):
+        # return tuple num point
+        point = 0
+        for card in self.hand_card:
+            point += (card.num%10)
+
+        return point
+
+
+    def is_tong(self):
+        suit = get_suit()
+        for i in range(0,self.num-1,1):
+            if suit[i] != suit[i+1]:
+                return False
+        return True        
+
+    def get_suit(self):
+        suit = list()
+        i=0
+        for card in self.hand_card:
+            suit[i] = card.suit
+            i += 1
+        return suit
+
+    def is_draw(self):
+        if self.bot :
+            draw_rate = 0.50
+            draw = bool(choice([True,False],p=[draw_rate, 1-draw_rate]))
+            return draw
+    
+    def is_bot(self):
+        return self.bot
+    
+
 
 # Main ======================= Main ======================= Main
 def main():
