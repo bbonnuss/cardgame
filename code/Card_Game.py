@@ -325,7 +325,6 @@ class Pok_Game_Menu(Menu):
         self.suffle_button = (0,0),(0,0)
         self.exit_button = (0,0),(0,0)
 
-
     def run(self):
         super().run()
         
@@ -363,34 +362,37 @@ class Pok_Game_Menu(Menu):
                 # Botton ------------------------- Botton
 
                 # start/restart Button 
-                if is_hit_box(mouse_pos,self.start_button[0], self.start_button[1]):
-                    #print ("pok")
+                if is_hit_box(mouse_pos,self.start_button[0], self.start_button[1]) and self.game_state == 0:
+                    #print ("start")
                     if clickdown:
-                        print ("start")
+                        self.game_state += 1
+                        
                 
                 #  draw Button
-                if is_hit_box(mouse_pos,self.draw_button[0], self.draw_button[1]):
-                    #print ("x")
+                if is_hit_box(mouse_pos,self.draw_button[0], self.draw_button[1]) and self.game_state == 4:
+                    #print ("draw")
                     if clickdown:
-                        print ("comming soon...")
+                        print ("draw")
 
                 # not draw Button
-                if is_hit_box(mouse_pos,self.not_draw_button[0], self.not_draw_button[1]):
-                    #print ("x")
+                if is_hit_box(mouse_pos,self.not_draw_button[0], self.not_draw_button[1]) and self.game_state == 4:
+                    #print ("no draw")
                     if clickdown:
-                        print ("comming soon...")
+                        print ("no draw")
 
                 # request suffle Button
-                if is_hit_box(mouse_pos,self.suffle_button[0], self.suffle_button[1]):
+                if is_hit_box(mouse_pos,self.suffle_button[0], self.suffle_button[1]) and False:    # not use for now
                     #print ("suffle")
                     if clickdown:
-                        print ("comming soon...")
+                        print ("suffle")
 
-                # exit Button (main menu)
-                if is_hit_box(mouse_pos,self.exit_button[0], self.exit_button[1]):
+                # finish Button (main menu)
+                if is_hit_box(mouse_pos,self.exit_button[0], self.exit_button[1]) and self.game_state == 6:
                     #print ("back")
                     if clickdown:
                         return 0
+
+
     def draw_card(self):
         return None
     
