@@ -83,6 +83,11 @@ class Image_Loader():
         self.cub_Q = pygame.image.load(join('resource','cub_Q.png')).convert_alpha()
         self.cub_K = pygame.image.load(join('resource','cub_K.png')).convert_alpha()
 
+        self.start = pygame.image.load(join('resource','start.png')).convert_alpha()
+        self.draw = pygame.image.load(join('resource','draw.png')).convert_alpha()
+        self.not_draw = pygame.image.load(join('resource','not_draw.png')).convert_alpha()
+        self.exit = pygame.image.load(join('resource','exit.png')).convert_alpha()
+
 # Function ======================= Function ======================= Function
 def is_hit_box(position,box_a,box_b):
     # position คือ ตำแหน่งเมาส์ (tuple 2 element)(จุด x,y)
@@ -115,6 +120,9 @@ class Menu_Controller():
     
     def credit(self):
         return self.credit_menu.run()
+    
+    def restart_pok(self):
+        self.pok_game_menu = Pok_Game_Menu()
 
 class Menu():   
     def __init__(self):
@@ -362,11 +370,11 @@ class Pok_Game_Menu(Menu):
         self.name = "Pok Deng"
         self.background = loaded_image.bg
         self.theme_song = None
+        self.game_state = 1
         self.draw_deck = Deck()
-        self.trash_deck = Deck()
-        self.game_state = 0
+        self.is_draw = None
+        self.player = [Bot(), Bot(), Bot(), Player(), Bot(), Bot(), Bot(), Bot()] # Bot ตัวสุดท้ายเป็น host
         # game_state 
-        # 0 = start phase
         # 1 = draw 1
         # 2 = draw 2
         # 3 = pok
@@ -375,11 +383,11 @@ class Pok_Game_Menu(Menu):
         # 6 = result
         
 
-        self.start_button = (0,0),(0,0)
-        self.draw_button = (0,0),(0,0)
-        self.not_draw_button = (0,0),(0,0)
+        self.start_button = (325,200),(475,270)
+        self.draw_button = (200,260),(350,330)
+        self.not_draw_button = (450,260),(600,330)
         self.suffle_button = (0,0),(0,0)
-        self.exit_button = (0,0),(0,0)
+        self.exit_button = (630,520),(780,590)
 
     def run(self):
         super().run()
@@ -390,11 +398,55 @@ class Pok_Game_Menu(Menu):
         while True:
             # loop per second 
             clock.tick(50)
-
+            print(self.game_state)
             
             self.draw_bg()      # draw_bg
             self.draw_card()    # draw player's card & draw deck 
-            self.draw_ui()      # draw result msg      
+            self.draw_ui()      # draw result msg   
+            pygame.display.update()   
+
+            # game process
+            if self.game_state == 1 or self.game_state == 2:
+                print ("state2")
+                for player in self.player:
+                    player.draw_in(self.draw_deck.draw_out())   # move card into player
+
+                    self.draw_card()   # draw player's card & draw deck 
+                    pygame.display.update()   
+
+                    pygame.time.delay(200)  # delay for animate
+
+                self.game_state += 1
+
+                    
+
+
+            elif self.game_state == 3:
+                print ("state3")
+                pygame.time.delay(1000)
+
+                self.game_state += 1
+
+            elif self.game_state == 5:
+                print ("state5")
+                i=0
+                for player in self.player:
+                    if i==3 and self.is_draw :
+                        player.draw_in(self.draw_deck.draw_out())
+                    elif i!=3 and player.is_draw():
+                        player.draw_in(self.draw_deck.draw_out())
+                    self.draw_card()   # draw player's card & draw deck 
+                    pygame.display.update()   
+
+                    pygame.time.delay(200)  # delay for animate
+
+                    i += 1   
+                self.game_state += 1
+
+            elif self.game_state == 2:
+                print ("state6")
+
+            self.draw_card()    # draw player's card & draw deck 
 
             # input - output
             for event in pygame.event.get():
@@ -417,25 +469,28 @@ class Pok_Game_Menu(Menu):
                 
                 # Botton ------------------------- Botton
 
-                # start/restart Button 
-                if is_hit_box(mouse_pos,self.start_button[0], self.start_button[1]) and (self.game_state == 0 or self.game_state == 6):
+                # restart Button 
+                if is_hit_box(mouse_pos,self.start_button[0], self.start_button[1]) and (self.game_state == 6):
                     #print ("start")
                     if clickdown:
-                        self.game_state += 1
+                        self.game_state = 1
                         self.draw_deck = Deck()
+                        self.is_draw = None
                         
                 
                 #  draw Button
                 if is_hit_box(mouse_pos,self.draw_button[0], self.draw_button[1]) and self.game_state == 4:
                     #print ("draw")
                     if clickdown:
-                        print ("draw")
+                        self.game_state += 1
+                        self.is_draw = True
 
                 # not draw Button
                 if is_hit_box(mouse_pos,self.not_draw_button[0], self.not_draw_button[1]) and self.game_state == 4:
                     #print ("no draw")
                     if clickdown:
-                        print ("no draw")
+                        self.game_state += 1
+                        self.is_draw = False
 
                 # request suffle Button
                 if is_hit_box(mouse_pos,self.suffle_button[0], self.suffle_button[1]) and False:    # not use for now
@@ -444,20 +499,34 @@ class Pok_Game_Menu(Menu):
                         self.draw_deck.shuffle()
 
                 # finish Button (static display)
-                if is_hit_box(mouse_pos,self.exit_button[0], self.exit_button[1]) and self.game_state == 6:
-                    #print ("back")
+                if is_hit_box(mouse_pos,self.exit_button[0], self.exit_button[1]):
+                    print ("back")
                     if clickdown:
                         return 0
 
 
-    def draw_card(self):
+    def draw_card(self): # draw player's card & draw deck 
         return None
     
 
     def draw_ui(self):
-        return None
+        # start button
+        if self.game_state == 6:
+            window.blit(pygame.transform.scale(loaded_image.start, (150,70)), self.start_button[0])
+
+        
+        if self.game_state == 4:
+            # draw_button
+            window.blit(pygame.transform.scale(loaded_image.draw, (150,70)), self.draw_button[0])
+
+            # not Draw button
+            window.blit(pygame.transform.scale(loaded_image.not_draw, (150,70)), self.not_draw_button[0])
+
+        # exit button
+        window.blit(pygame.transform.scale(loaded_image.exit, (150,70)), self.exit_button[0])
 
 # Mechanic ======================= Mechanic
+
 
 class Deck():
     def __init__(self, suffle=True):
@@ -874,8 +943,9 @@ class Player():
     def draw_in(self, card):
         self.hand_card.append(card)
         self.num += 1
-        self.hand_card.sort()
+        self.hand_card.sort(key=lambda x: x.get_num())
     
+
     def clear_hand(self):
         self.hand_card = list()
         self.num = 0
@@ -885,6 +955,9 @@ class Player():
         point = 0
         for card in self.hand_card:
             point += (card.get_num()%10)
+
+        if point >= 10:
+            point %= 10
 
         return point
 
@@ -905,18 +978,7 @@ class Player():
         for i in range(0,self.num-1,1):
             if suit_list[i] != suit_list[i+1]:
                 return False
-        return True        
-
-
-    def is_tong(self):
-        # return true when 3 card are the same number
-        if self.num < 3:
-            return False
-        num_list = self.get_num()
-        for i in range(0,self.num-1,1):
-            if num_list[i] != num_list[i+1]:
-                return False
-        return True        
+        return True              
 
     def get_suit(self):
         # return list of suit
@@ -938,13 +1000,60 @@ class Player():
 
     def is_draw(self):
         if self.bot :
-            draw_rate = 0.50
+            if self.is_pok():
+                draw_rate = 0
+            else:
+                draw_rate = (9-self.get_point())/9
+                print("Draw rate ",draw_rate, "point = ",self.get_point())
+
             draw = bool(choice([True,False],p=[draw_rate, 1-draw_rate]))
             return draw
     
     def is_bot(self):
         return self.bot
+
     
+    def is_pok(self):
+        if self.num == 2 and self.get_point() >= 8:
+            return True
+        return False
+
+
+    def is_pok9(self):
+        if self.num == 2 and self.get_point() == 9:
+            return True
+        return False
+
+    def is_pok8(self):
+        if self.num == 2 and self.get_point() == 8:
+            return True
+        return False
+
+    def is_tong(self):
+        # return true when 3 card are the same number
+        if self.num < 3:
+            return False
+        num_list = self.get_num()
+        for i in range(0,self.num-1,1):
+            if num_list[i] != num_list[i+1]:
+                return False
+        return True  
+    
+    def is_straight_flood(self):
+        if self.is_straight() and self.is_flood():
+            return True
+        return False
+    
+    def is_close(self): # ขอบ
+        if self.num == 3:
+            if self.hand_card[0].is_char() and self.hand_card[1].is_char() and self.hand_card[2].is_char():
+                return True
+        return False
+
+    
+class Bot(Player):
+    def __init__(self):
+        super().__init__(True)
 
 
 # Main ======================= Main ======================= Main
@@ -969,7 +1078,7 @@ def main():
         elif go == 2:
             # stop main music theme
             pygame.mixer.music.stop()
-
+            menu.restart_pok()  # clear old game data before start new game
             go = menu.pok()
 
         elif go == 32:
