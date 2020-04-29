@@ -376,7 +376,7 @@ class Pok_Game_Menu(Menu):
         self.draw_deck = Deck()
         self.is_draw = None
         self.player = [Bot(), Bot(), Bot(), Player(), Bot(), Bot(), Bot(), Bot()] # Bot ตัวสุดท้ายเป็น host
-        self.player_pos = []
+        self.player_pos = [(200, 200), (100, 300), (200, 400), (400, 500), (600, 400), (700, 300), (600, 200), (400, 100)]
         # game_state 
         # 1 = draw 1
         # 2 = draw 2
@@ -477,8 +477,14 @@ class Pok_Game_Menu(Menu):
                     #print ("start")
                     if clickdown:
                         self.game_state = 1
+                        # new deck
                         self.draw_deck = Deck()
+                        # reset value
                         self.is_draw = None
+                        
+                        # clear card on player's hand
+                        for player in self.player:
+                            player.clear_hand()
                         
                 
                 #  draw Button
@@ -511,7 +517,7 @@ class Pok_Game_Menu(Menu):
     def draw_card(self): # draw player's card & draw deck 
         i=0
         for player in self.player:
-            player.draw_hand(False)
+            player.draw_hand(self.player_pos[i],False)
             i+=1
     
 
@@ -949,7 +955,7 @@ class Player():
     def draw_hand(self, pos, show):
         # pos = tuple : center of location to draw (x,y)
         # show = bool : true=show front card / false=show back card
-        overlap_per_card = 20 # pixel
+        overlap_per_card = 30 # pixel
         card_resolution = (124,180)
         card_horizon = card_resolution[0]
         card_verical = card_resolution[1]
@@ -960,9 +966,9 @@ class Player():
         for card in self.hand_card:
             if show:
                 # draw
-                window.blit(pygame.transform.scale(card.get_image(), card_horizon), card_pos)
+                window.blit(pygame.transform.scale(card.get_image(), card_resolution), card_pos)
             else:
-                window.blit(pygame.transform.scale(loaded_image.back_card, card_horizon), card_pos)
+                window.blit(pygame.transform.scale(loaded_image.back_card, card_resolution), card_pos)
             # move right 
             card_pos = (card_pos[0]+overlap_per_card, card_pos[1])
 
