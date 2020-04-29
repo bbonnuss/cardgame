@@ -362,7 +362,7 @@ class Pok_Game_Menu(Menu):
                 # Botton ------------------------- Botton
 
                 # start/restart Button 
-                if is_hit_box(mouse_pos,self.start_button[0], self.start_button[1]) and self.game_state == 0:
+                if is_hit_box(mouse_pos,self.start_button[0], self.start_button[1]) and (self.game_state == 0 or self.game_state == 6):
                     #print ("start")
                     if clickdown:
                         self.game_state += 1
