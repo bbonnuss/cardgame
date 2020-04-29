@@ -27,6 +27,8 @@ class Image_Loader():
         self.credit_back = pygame.image.load(join('resource','credit_back.png')).convert_alpha()
         self.credit_next = pygame.image.load(join('resource','credit_next.png')).convert_alpha()
         
+        self.back_card = pygame.image.load(join('resource','back_card.png')).convert_alpha()
+
         self.spd_A = pygame.image.load(join('resource','spd_A.png')).convert_alpha()
         self.spd_2 = pygame.image.load(join('resource','spd_2.png')).convert_alpha()
         self.spd_3 = pygame.image.load(join('resource','spd_3.png')).convert_alpha()
