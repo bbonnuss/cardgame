@@ -1,6 +1,7 @@
 import pygame
 from os.path import join
 from numpy.random import choice
+from random import shuffle
 
 # return value
 # -1 = exit game
@@ -26,7 +27,61 @@ class Image_Loader():
         self.credit_back = pygame.image.load(join('resource','credit_back.png')).convert_alpha()
         self.credit_next = pygame.image.load(join('resource','credit_next.png')).convert_alpha()
         
-        self.spd_ = pygame.image.load(join('resource','credit_next.png')).convert_alpha()
+        self.spd_A = pygame.image.load(join('resource','spd_A.png')).convert_alpha()
+        self.spd_2 = pygame.image.load(join('resource','spd_2.png')).convert_alpha()
+        self.spd_3 = pygame.image.load(join('resource','spd_3.png')).convert_alpha()
+        self.spd_4 = pygame.image.load(join('resource','spd_4.png')).convert_alpha()
+        self.spd_5 = pygame.image.load(join('resource','spd_5.png')).convert_alpha()
+        self.spd_6 = pygame.image.load(join('resource','spd_6.png')).convert_alpha()
+        self.spd_7 = pygame.image.load(join('resource','spd_7.png')).convert_alpha()
+        self.spd_8 = pygame.image.load(join('resource','spd_8.png')).convert_alpha()
+        self.spd_9 = pygame.image.load(join('resource','spd_9.png')).convert_alpha()
+        self.spd_10 = pygame.image.load(join('resource','spd_10.png')).convert_alpha()
+        self.spd_J = pygame.image.load(join('resource','spd_J.png')).convert_alpha()
+        self.spd_Q = pygame.image.load(join('resource','spd_Q.png')).convert_alpha()
+        self.spd_K = pygame.image.load(join('resource','spd_K.png')).convert_alpha()
+
+        self.hrt_A = pygame.image.load(join('resource','hrt_A.png')).convert_alpha()
+        self.hrt_2 = pygame.image.load(join('resource','hrt_2.png')).convert_alpha()
+        self.hrt_3 = pygame.image.load(join('resource','hrt_3.png')).convert_alpha()
+        self.hrt_4 = pygame.image.load(join('resource','hrt_4.png')).convert_alpha()
+        self.hrt_5 = pygame.image.load(join('resource','hrt_5.png')).convert_alpha()
+        self.hrt_6 = pygame.image.load(join('resource','hrt_6.png')).convert_alpha()
+        self.hrt_7 = pygame.image.load(join('resource','hrt_7.png')).convert_alpha()
+        self.hrt_8 = pygame.image.load(join('resource','hrt_8.png')).convert_alpha()
+        self.hrt_9 = pygame.image.load(join('resource','hrt_9.png')).convert_alpha()
+        self.hrt_10 = pygame.image.load(join('resource','hrt_10.png')).convert_alpha()
+        self.hrt_J = pygame.image.load(join('resource','hrt_J.png')).convert_alpha()
+        self.hrt_Q = pygame.image.load(join('resource','hrt_Q.png')).convert_alpha()
+        self.hrt_K = pygame.image.load(join('resource','hrt_K.png')).convert_alpha()
+
+        self.dmd_A = pygame.image.load(join('resource','dmd_A.png')).convert_alpha()
+        self.dmd_2 = pygame.image.load(join('resource','dmd_2.png')).convert_alpha()
+        self.dmd_3 = pygame.image.load(join('resource','dmd_3.png')).convert_alpha()
+        self.dmd_4 = pygame.image.load(join('resource','dmd_4.png')).convert_alpha()
+        self.dmd_5 = pygame.image.load(join('resource','dmd_5.png')).convert_alpha()
+        self.dmd_6 = pygame.image.load(join('resource','dmd_6.png')).convert_alpha()
+        self.dmd_7 = pygame.image.load(join('resource','dmd_7.png')).convert_alpha()
+        self.dmd_8 = pygame.image.load(join('resource','dmd_8.png')).convert_alpha()
+        self.dmd_9 = pygame.image.load(join('resource','dmd_9.png')).convert_alpha()
+        self.dmd_10 = pygame.image.load(join('resource','dmd_10.png')).convert_alpha()
+        self.dmd_J = pygame.image.load(join('resource','dmd_J.png')).convert_alpha()
+        self.dmd_Q = pygame.image.load(join('resource','dmd_Q.png')).convert_alpha()
+        self.dmd_K = pygame.image.load(join('resource','dmd_K.png')).convert_alpha()
+
+        self.cub_A = pygame.image.load(join('resource','cub_A.png')).convert_alpha()
+        self.cub_2 = pygame.image.load(join('resource','cub_2.png')).convert_alpha()
+        self.cub_3 = pygame.image.load(join('resource','cub_3.png')).convert_alpha()
+        self.cub_4 = pygame.image.load(join('resource','cub_4.png')).convert_alpha()
+        self.cub_5 = pygame.image.load(join('resource','cub_5.png')).convert_alpha()
+        self.cub_6 = pygame.image.load(join('resource','cub_6.png')).convert_alpha()
+        self.cub_7 = pygame.image.load(join('resource','cub_7.png')).convert_alpha()
+        self.cub_8 = pygame.image.load(join('resource','cub_8.png')).convert_alpha()
+        self.cub_9 = pygame.image.load(join('resource','cub_9.png')).convert_alpha()
+        self.cub_10 = pygame.image.load(join('resource','cub_10.png')).convert_alpha()
+        self.cub_J = pygame.image.load(join('resource','cub_J.png')).convert_alpha()
+        self.cub_Q = pygame.image.load(join('resource','cub_Q.png')).convert_alpha()
+        self.cub_K = pygame.image.load(join('resource','cub_K.png')).convert_alpha()
 
 # Function ======================= Function ======================= Function
 def is_hit_box(position,box_a,box_b):
@@ -406,17 +461,22 @@ class Pok_Game_Menu(Menu):
 class Deck():
     def __init__(self):
         # data
-        self.card = [None] *52
+        self.card = [spd_A(), spd_2(), spd_3(),spd_4(), spd_5(), spd_6(), spd_7(), spd_8(), spd_9(), spd_10(), spd_J(), spd_Q(), spd_K(),
+                    hrt_A(), hrt_2(), hrt_3(),hrt_4(), hrt_5(), hrt_6(), hrt_7(), hrt_8(), hrt_9(), hrt_10(), hrt_J(), hrt_Q(), hrt_K(),
+                    dmd_A(), dmd_2(), dmd_3(),dmd_4(), dmd_5(), dmd_6(), dmd_7(), dmd_8(), dmd_9(), dmd_10(), dmd_J(), dmd_Q(), dmd_K(),
+                    cub_A(), cub_2(), cub_3(),cub_4(), cub_5(), cub_6(), cub_7(), cub_8(), cub_9(), cub_10(), cub_J(), cub_Q(), cub_K()]
     
-    def suffle(self):
-        return None
+    def shuffle(self):
+        shuffle(self.card)
+    
+    def draw
 
 
 class Card():
-    def __init__(self)
+    def __init__(self):
         self.image = None
-        self.num = -1
-        self.suit = -1
+        self.num = None
+        self.suit = None
         self.char = None
     
     def get_num(self):
@@ -804,7 +864,7 @@ class Player():
         self.num = 0
     
 
-    def draw(self, card):
+    def draw_in(self, card):
         self.hand_card.append(card)
         self.num += 1
         self.hand_card.sort()
