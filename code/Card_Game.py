@@ -24,6 +24,8 @@ class Image_Loader():
         self.credit2 = pygame.image.load(join('resource','credit2.png')).convert_alpha()
         self.credit_back = pygame.image.load(join('resource','credit_back.png')).convert_alpha()
         self.credit_next = pygame.image.load(join('resource','credit_next.png')).convert_alpha()
+        
+        self.spd_ = pygame.image.load(join('resource','credit_next.png')).convert_alpha()
 
 # Function ======================= Function ======================= Function
 def is_hit_box(position,box_a,box_b):
@@ -108,7 +110,7 @@ class Main_Menu(Menu):
 
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
-                print (mouse_pos)
+                #print (mouse_pos)
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     clickdown = True
@@ -174,7 +176,7 @@ class Credit_Menu(Menu):
 
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
-                print (mouse_pos)
+                #print (mouse_pos)
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     clickdown = True
@@ -191,7 +193,7 @@ class Credit_Menu(Menu):
                 # Botton ------------------------- Botton
                 # next Button
                 if is_hit_box(mouse_pos,self.next_button[0], self.next_button[1]):
-                    print ("nextpage")
+                    #print ("nextpage")
                     if clickdown:
                         if self.page == 1:
                             self.page += 1
@@ -203,7 +205,7 @@ class Credit_Menu(Menu):
 
                 # back Button (main menu)
                 if is_hit_box(mouse_pos,self.back_button[0], self.back_button[1]):
-                    print ("back")
+                    #print ("back")
                     if clickdown:
                         if self.page == 1:
                             return 0
@@ -232,11 +234,6 @@ class Credit_Menu(Menu):
             window.blit(pygame.transform.scale(loaded_image.credit_back, (150, 70)), self.back_button[0])
             
         
-        
-
-
-        
-
 class Game_Selection_Menu(Menu):
     def __init__(self):        
         self.name = "Game Selection"
@@ -271,7 +268,7 @@ class Game_Selection_Menu(Menu):
                     clickdown = False
                 
                     
-                # exit
+                # window exit button
                 if event.type == pygame.QUIT:
                     # stop theme song
                     pygame.mixer.music.stop()
@@ -306,17 +303,107 @@ class Game_Selection_Menu(Menu):
 
 class Pok_Game_Menu(Menu):
     def __init__(self):
-        self.background = None
+        self.name = "Pok Deng"
+        self.background = loaded_image.bg
+        self.theme_song = None
+        self.draw_deck = Deck()
+        self.trash_deck = Deck()
+        self.game_state = 0
+        # game_state 
+        # 0 = start phase
+        # 1 = draw 1
+        # 2 = draw 2
+        # 3 = pok
+        # 4 = ask for draw 3?          
+        # 5 = draw 3
+        # 6 = result
+        
+
+        self.start_button = (0,0),(0,0)
+        self.draw_button = (0,0),(0,0)
+        self.not_draw_button = (0,0),(0,0)
+        self.suffle_button = (0,0),(0,0)
+        self.exit_button = (0,0),(0,0)
+
 
     def run(self):
+        super().run()
+        
+        # loop per second 
+        clock = pygame.time.Clock()
+
+        while True:
+            # loop per second 
+            clock.tick(40)
+
+            
+            self.draw_bg()      # draw_bg
+            self.draw_card()    # draw player's card & draw deck 
+            self.draw_ui()      # draw result msg      
+
+            # input - output
+            for event in pygame.event.get():
+
+                # pointer
+                mouse_pos = pygame.mouse.get_pos()
+                print (mouse_pos)
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    clickdown = True
+                else:
+                    clickdown = False
+                
+                    
+                # window exit button
+                if event.type == pygame.QUIT:
+                    # stop theme song
+                    pygame.mixer.music.stop()
+                    pygame.quit()
+                
+                # Botton ------------------------- Botton
+
+                # start/restart Button 
+                if is_hit_box(mouse_pos,self.start_button[0], self.start_button[1]):
+                    #print ("pok")
+                    if clickdown:
+                        print ("start")
+                
+                #  draw Button
+                if is_hit_box(mouse_pos,self.draw_button[0], self.draw_button[1]):
+                    #print ("x")
+                    if clickdown:
+                        print ("comming soon...")
+
+                # not draw Button
+                if is_hit_box(mouse_pos,self.not_draw_button[0], self.not_draw_button[1]):
+                    #print ("x")
+                    if clickdown:
+                        print ("comming soon...")
+
+                # request suffle Button
+                if is_hit_box(mouse_pos,self.suffle_button[0], self.suffle_button[1]):
+                    #print ("suffle")
+                    if clickdown:
+                        print ("comming soon...")
+
+                # exit Button (main menu)
+                if is_hit_box(mouse_pos,self.exit_button[0], self.exit_button[1]):
+                    #print ("back")
+                    if clickdown:
+                        return 0
+    def draw_card(self):
+        return None
+    
+
+    def draw_ui(self):
         return None
 
 # Mechanic ======================= Mechanic
 
-class deck():
+class Deck():
     def __init__(self):
         # data
-        self.card = list()
+        self.card = [None] *52
     
     def suffle(self):
         return None
@@ -339,11 +426,13 @@ def main():
 
         elif go == 1:
             go = menu.selection()
+            
         elif go == 2:
             # stop main music theme
             pygame.mixer.music.stop()
 
             go = menu.pok()
+
         elif go == 32:
             go = menu.credit()
 
