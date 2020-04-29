@@ -374,6 +374,7 @@ class Pok_Game_Menu(Menu):
         self.draw_deck = Deck()
         self.is_draw = None
         self.player = [Bot(), Bot(), Bot(), Player(), Bot(), Bot(), Bot(), Bot()] # Bot ตัวสุดท้ายเป็น host
+        self.player_pos = []
         # game_state 
         # 1 = draw 1
         # 2 = draw 2
@@ -506,7 +507,10 @@ class Pok_Game_Menu(Menu):
 
 
     def draw_card(self): # draw player's card & draw deck 
-        return None
+        i=0
+        for player in self.player:
+            player.draw_hand(False)
+            i+=1
     
 
     def draw_ui(self):
@@ -940,6 +944,27 @@ class Player():
         self.num = 0
     
 
+    def draw_hand(self, pos, show):
+        # pos = tuple : center of location to draw (x,y)
+        # show = bool : true=show front card / false=show back card
+        overlap_per_card = 20 # pixel
+        card_resolution = (124,180)
+        card_horizon = card_resolution[0]
+        card_verical = card_resolution[1]
+        full_horizon = card_horizon+((self.num-1)*overlap_per_card)    #card1 + 20 + 20 = full horizon pixel 
+        full_verical = card_verical
+        card_pos = (pos[0]-(full_horizon/2),pos[1]-full_verical/2)
+
+        for card in self.hand_card:
+            if show:
+                # draw
+                window.blit(pygame.transform.scale(card.get_image(), card_horizon), card_pos)
+            else:
+                window.blit(pygame.transform.scale(loaded_image.back_card, card_horizon), card_pos)
+            # move right 
+            card_pos = (card_pos[0]+overlap_per_card, card_pos[1])
+
+
     def draw_in(self, card):
         self.hand_card.append(card)
         self.num += 1
@@ -950,6 +975,7 @@ class Player():
         self.hand_card = list()
         self.num = 0
     
+
     def get_point(self):
         # return int 
         point = 0
@@ -970,6 +996,7 @@ class Player():
                     return True
         return False
 
+
     def is_flood(self):
         # return true when 3 card are the same suit
         if self.num < 3:
@@ -980,6 +1007,7 @@ class Player():
                 return False
         return True              
 
+
     def get_suit(self):
         # return list of suit
         suit = list()
@@ -989,6 +1017,7 @@ class Player():
             i += 1
         return suit
     
+
     def get_num(self):
         # return list of num
         num = list()
@@ -998,13 +1027,13 @@ class Player():
             i += 1
         return num
 
+
     def is_draw(self):
         if self.bot :
             if self.is_pok():
                 draw_rate = 0
             else:
                 draw_rate = (9-self.get_point())/9
-                print("Draw rate ",draw_rate, "point = ",self.get_point())
 
             draw = bool(choice([True,False],p=[draw_rate, 1-draw_rate]))
             return draw
