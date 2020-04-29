@@ -523,6 +523,279 @@ class spd_K(Card):
         self.suit = 4
         self.char = True
 
+class hrt_A(Card):
+    def __init__(self):
+        self.image = loaded_image.hrt_A
+        self.num = 1
+        self.suit = 4
+        self.char = True
+
+class hrt_2(Card):
+    def __init__(self):
+        self.image = loaded_image.hrt_2
+        self.num = 2
+        self.suit = 4
+        self.char = False
+
+class hrt_3(Card):
+    def __init__(self):
+        self.image = loaded_image.hrt_3
+        self.num = 3
+        self.suit = 4
+        self.char = False
+
+class hrt_4(Card):
+    def __init__(self):
+        self.image = loaded_image.hrt_4
+        self.num = 4
+        self.suit = 4
+        self.char = False
+
+class hrt_5(Card):
+    def __init__(self):
+        self.image = loaded_image.hrt_5
+        self.num = 5
+        self.suit = 4
+        self.char = False
+
+class hrt_6(Card):
+    def __init__(self):
+        self.image = loaded_image.hrt_6
+        self.num = 6
+        self.suit = 4
+        self.char = False
+
+class hrt_7(Card):
+    def __init__(self):
+        self.image = loaded_image.hrt_7
+        self.num = 7
+        self.suit = 4
+        self.char = False
+
+class hrt_8(Card):
+    def __init__(self):
+        self.image = loaded_image.hrt_8
+        self.num = 8
+        self.suit = 4
+        self.char = False
+
+class hrt_9(Card):
+    def __init__(self):
+        self.image = loaded_image.hrt_9
+        self.num = 9
+        self.suit = 4
+        self.char = False
+
+class hrt_10(Card):
+    def __init__(self):
+        self.image = loaded_image.hrt_10
+        self.num = 10
+        self.suit = 4
+        self.char = False
+
+class hrt_J(Card):
+    def __init__(self):
+        self.image = loaded_image.hrt_J
+        self.num = 0
+        self.suit = 4
+        self.char = True
+
+class hrt_Q(Card):
+    def __init__(self):
+        self.image = loaded_image.hrt_Q
+        self.num = 0
+        self.suit = 4
+        self.char = True
+
+class hrt_K(Card):
+    def __init__(self):
+        self.image = loaded_image.hrt_K
+        self.num = 0
+        self.suit = 4
+        self.char = True
+
+class dmd_A(Card):
+    def __init__(self):
+        self.image = loaded_image.dmd_A
+        self.num = 1
+        self.suit = 4
+        self.char = True
+
+class dmd_2(Card):
+    def __init__(self):
+        self.image = loaded_image.dmd_2
+        self.num = 2
+        self.suit = 4
+        self.char = False
+
+class dmd_3(Card):
+    def __init__(self):
+        self.image = loaded_image.dmd_3
+        self.num = 3
+        self.suit = 4
+        self.char = False
+
+class dmd_4(Card):
+    def __init__(self):
+        self.image = loaded_image.dmd_4
+        self.num = 4
+        self.suit = 4
+        self.char = False
+
+class dmd_5(Card):
+    def __init__(self):
+        self.image = loaded_image.dmd_5
+        self.num = 5
+        self.suit = 4
+        self.char = False
+
+class dmd_6(Card):
+    def __init__(self):
+        self.image = loaded_image.dmd_6
+        self.num = 6
+        self.suit = 4
+        self.char = False
+
+class dmd_7(Card):
+    def __init__(self):
+        self.image = loaded_image.dmd_7
+        self.num = 7
+        self.suit = 4
+        self.char = False
+
+class dmd_8(Card):
+    def __init__(self):
+        self.image = loaded_image.dmd_8
+        self.num = 8
+        self.suit = 4
+        self.char = False
+
+class dmd_9(Card):
+    def __init__(self):
+        self.image = loaded_image.dmd_9
+        self.num = 9
+        self.suit = 4
+        self.char = False
+
+class dmd_10(Card):
+    def __init__(self):
+        self.image = loaded_image.dmd_10
+        self.num = 10
+        self.suit = 4
+        self.char = False
+
+class dmd_J(Card):
+    def __init__(self):
+        self.image = loaded_image.dmd_J
+        self.num = 0
+        self.suit = 4
+        self.char = True
+
+class dmd_Q(Card):
+    def __init__(self):
+        self.image = loaded_image.dmd_Q
+        self.num = 0
+        self.suit = 4
+        self.char = True
+
+class dmd_K(Card):
+    def __init__(self):
+        self.image = loaded_image.dmd_K
+        self.num = 0
+        self.suit = 4
+        self.char = True
+
+class cub_A(Card):
+    def __init__(self):
+        self.image = loaded_image.cub_A
+        self.num = 1
+        self.suit = 4
+        self.char = True
+
+class cub_2(Card):
+    def __init__(self):
+        self.image = loaded_image.cub_2
+        self.num = 2
+        self.suit = 4
+        self.char = False
+
+class cub_3(Card):
+    def __init__(self):
+        self.image = loaded_image.cub_3
+        self.num = 3
+        self.suit = 4
+        self.char = False
+
+class cub_4(Card):
+    def __init__(self):
+        self.image = loaded_image.cub_4
+        self.num = 4
+        self.suit = 4
+        self.char = False
+
+class cub_5(Card):
+    def __init__(self):
+        self.image = loaded_image.cub_5
+        self.num = 5
+        self.suit = 4
+        self.char = False
+
+class cub_6(Card):
+    def __init__(self):
+        self.image = loaded_image.cub_6
+        self.num = 6
+        self.suit = 4
+        self.char = False
+
+class cub_7(Card):
+    def __init__(self):
+        self.image = loaded_image.cub_7
+        self.num = 7
+        self.suit = 4
+        self.char = False
+
+class cub_8(Card):
+    def __init__(self):
+        self.image = loaded_image.cub_8
+        self.num = 8
+        self.suit = 4
+        self.char = False
+
+class cub_9(Card):
+    def __init__(self):
+        self.image = loaded_image.cub_9
+        self.num = 9
+        self.suit = 4
+        self.char = False
+
+class cub_10(Card):
+    def __init__(self):
+        self.image = loaded_image.cub_10
+        self.num = 10
+        self.suit = 4
+        self.char = False
+
+class cub_J(Card):
+    def __init__(self):
+        self.image = loaded_image.cub_J
+        self.num = 0
+        self.suit = 4
+        self.char = True
+
+class cub_Q(Card):
+    def __init__(self):
+        self.image = loaded_image.cub_Q
+        self.num = 0
+        self.suit = 4
+        self.char = True
+
+class cub_K(Card):
+    def __init__(self):
+        self.image = loaded_image.cub_K
+        self.num = 0
+        self.suit = 4
+        self.char = True
+
 
 class Player():
     def __init__(self, bot=False):
