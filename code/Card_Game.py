@@ -415,7 +415,7 @@ class Pok_Game_Menu(Menu):
                 for player in self.player:
                     player.draw_in(self.draw_deck.draw_out())   # move card into player
 
-                    self.draw_ui()()   # draw player's card & draw deck 
+                    self.draw_ui()   # draw player's card & draw deck 
                     pygame.display.update()   
 
                     pygame.time.delay(200)  # delay for animate
@@ -441,7 +441,7 @@ class Pok_Game_Menu(Menu):
                         player.draw_in(self.draw_deck.draw_out())
                     elif i!=3 and player.is_draw():
                         player.draw_in(self.draw_deck.draw_out())
-                    self.draw_ui()()   # draw player's card & draw deck 
+                    self.draw_ui()   # draw player's card & draw deck 
                     pygame.display.update()   
 
                     pygame.time.delay(200)  # delay for animate
@@ -454,7 +454,8 @@ class Pok_Game_Menu(Menu):
                 self.is_collected_stats = True
 
 
-            self.draw_ui()()    # draw player's card & draw deck  msg button
+
+            self.draw_ui()    # draw player's card & draw deck  msg button
 
             # input - output
             for event in pygame.event.get():
@@ -555,6 +556,7 @@ class Pok_Game_Menu(Menu):
         msg = font_size.render("Player", True, (0,0,0),(255,215,0))
         window.blit(pygame.transform.scale(msg, (100,40)), (350,385))
         
+        # pok
 
 # Mechanic ======================= Mechanic
 
@@ -672,21 +674,21 @@ class spd_10(Card):
 class spd_J(Card):
     def __init__(self):
         self.image = loaded_image.spd_J
-        self.num = 0
+        self.num = 11
         self.suit = 4
         self.char = True
 
 class spd_Q(Card):
     def __init__(self):
         self.image = loaded_image.spd_Q
-        self.num = 0
+        self.num = 12
         self.suit = 4
         self.char = True
 
 class spd_K(Card):
     def __init__(self):
         self.image = loaded_image.spd_K
-        self.num = 0
+        self.num = 13
         self.suit = 4
         self.char = True
 
@@ -763,21 +765,21 @@ class hrt_10(Card):
 class hrt_J(Card):
     def __init__(self):
         self.image = loaded_image.hrt_J
-        self.num = 0
+        self.num = 11
         self.suit = 4
         self.char = True
 
 class hrt_Q(Card):
     def __init__(self):
         self.image = loaded_image.hrt_Q
-        self.num = 0
+        self.num = 12
         self.suit = 4
         self.char = True
 
 class hrt_K(Card):
     def __init__(self):
         self.image = loaded_image.hrt_K
-        self.num = 0
+        self.num = 13
         self.suit = 4
         self.char = True
 
@@ -854,21 +856,21 @@ class dmd_10(Card):
 class dmd_J(Card):
     def __init__(self):
         self.image = loaded_image.dmd_J
-        self.num = 0
+        self.num = 11
         self.suit = 4
         self.char = True
 
 class dmd_Q(Card):
     def __init__(self):
         self.image = loaded_image.dmd_Q
-        self.num = 0
+        self.num = 12
         self.suit = 4
         self.char = True
 
 class dmd_K(Card):
     def __init__(self):
         self.image = loaded_image.dmd_K
-        self.num = 0
+        self.num = 13
         self.suit = 4
         self.char = True
 
@@ -945,21 +947,21 @@ class cub_10(Card):
 class cub_J(Card):
     def __init__(self):
         self.image = loaded_image.cub_J
-        self.num = 0
+        self.num = 11
         self.suit = 4
         self.char = True
 
 class cub_Q(Card):
     def __init__(self):
         self.image = loaded_image.cub_Q
-        self.num = 0
+        self.num = 12
         self.suit = 4
         self.char = True
 
 class cub_K(Card):
     def __init__(self):
         self.image = loaded_image.cub_K
-        self.num = 0
+        self.num = 13
         self.suit = 4
         self.char = True
 
@@ -969,7 +971,47 @@ class Player():
         self.hand_card = list()
         self.bot = bot
         self.num = 0
+        self.result = 0
+        self.deng2 = False
+        self.deng3
     
+    def draw_result(self, pos, show):
+
+        msg_resolution = (100,40)    
+        left_top_pos = (pos[0]-(msg_resolution[0]/2),pos[1]-msg_resolution[1]/2)
+        if self.is_pok9():
+            if self.is_flood():
+                msg = font_size.render("ป้อก 9 สองเด้ง", True, (0,0,0),(255,215,0))
+            else:
+                msg = font_size.render("ป้อก 9", True, (0,0,0),(255,215,0))
+            
+
+        elif self.is_pok8():
+            if self.is_flood():
+                msg = font_size.render("ป้อก 8 สองเด้ง", True, (0,0,0),(255,215,0))
+            else:
+                msg = font_size.render("ป้อก 8", True, (0,0,0),(255,215,0))
+
+        elif self.is_tong():
+            msg = font_size.render("ตอง "+str(self.get_point), True, (0,0,0),(255,215,0))
+
+        elif self.is_straight_flood()
+            msg = font_size.render("เรียง "+str(self.hand_card[0].get_num())+str(self.hand_card[1].get_num())+str(self.hand_card[2].get_num()), True, (0,0,0),(255,215,0))
+        elif self.is_close():
+            msg = font_size.render("ขอบ", True, (0,0,0),(255,215,0))
+        else:
+            self.result = self.get_point()
+            msg_str = str(self.get_point)+"แต้ม"
+            if self.is_flood() and self.num == 2:
+                msg_str += " สองเด้ง"
+            elif self.is_flood() and self.num == 3:
+                msg_str += " สามเด้ง"
+            msg = font_size.render(msg_str, True, (0,0,0),(255,215,0))
+        
+        if show:
+            window.blit(pygame.transform.scale(msg, msg_resolution), left_top_pos)
+            
+
 
     def draw_hand(self, pos, show):
         # pos = tuple : center of location to draw (x,y)
@@ -1007,7 +1049,8 @@ class Player():
         # return int 
         point = 0
         for card in self.hand_card:
-            point += (card.get_num()%10)
+            if card.get_num() <= 10:
+                point += (card.get_num()%10)
 
         if point >= 10:
             point %= 10
@@ -1024,8 +1067,8 @@ class Player():
 
 
     def is_flood(self):
-        # return true when 3 card are the same suit
-        if self.num < 3:
+        # return true when 2-3 card are the same suit
+        if self.num < 2:
             return False
         suit_list = self.get_suit()
         for i in range(0,self.num-1,1):
@@ -1076,11 +1119,13 @@ class Player():
 
     def is_pok9(self):
         if self.num == 2 and self.get_point() == 9:
+            self.result = 99
             return True
         return False
 
     def is_pok8(self):
         if self.num == 2 and self.get_point() == 8:
+            self.result = 88
             return True
         return False
 
@@ -1092,16 +1137,19 @@ class Player():
         for i in range(0,self.num-1,1):
             if num_list[i] != num_list[i+1]:
                 return False
+        self.result = 30+self.hand_card[0].get_num()
         return True  
     
     def is_straight_flood(self):
         if self.is_straight() and self.is_flood():
+            self.result = 10+self.hand_card[0].get_num()
             return True
         return False
     
     def is_close(self): # ขอบ
         if self.num == 3:
             if self.hand_card[0].is_char() and self.hand_card[1].is_char() and self.hand_card[2].is_char():
+                self.result = 10
                 return True
         return False
 
