@@ -14,6 +14,7 @@ from random import shuffle
 class Sound_Loader():
     def __init__(self):
         self.main_menu = pygame.mixer.Sound(join('resource','main_theme.wav'))
+        self.bye = pygame.mixer.Sound(join('resource','bye.wav'))
 
 
 class Image_Loader():
@@ -375,6 +376,8 @@ class Pok_Game_Menu(Menu):
         self.game_state = 1
         self.draw_deck = Deck()
         self.is_draw = None
+        self.is_collected_stats = False
+        self.stats = [0, 0, 0, 0, 0, 0, 0, 0, ] # win, lose, draw, pok9, pok8, tong, reung, krowb
         self.player = [Bot(), Bot(), Bot(), Player(), Bot(), Bot(), Bot(), Bot()] # Bot ตัวสุดท้ายเป็น host
         self.player_pos = [(225, 150), (100, 300), (225, 450), (400, 500), (575, 450), (700, 300), (575, 150), (400, 100)]
         # game_state 
@@ -386,7 +389,7 @@ class Pok_Game_Menu(Menu):
         # 6 = result
         
 
-        self.start_button = (325,200),(475,270)
+        self.start_button = (630,10),(780,80)
         self.draw_button = (200,260),(350,330)
         self.not_draw_button = (450,260),(600,330)
         self.suffle_button = (0,0),(0,0)
@@ -403,8 +406,7 @@ class Pok_Game_Menu(Menu):
             clock.tick(50)
             
             self.draw_bg()      # draw_bg
-            self.draw_card()    # draw player's card & draw deck 
-            self.draw_ui()      # draw result msg   
+            self.draw_ui()    # draw player's card & draw deck 
             pygame.display.update()   
 
             # game process
@@ -413,21 +415,20 @@ class Pok_Game_Menu(Menu):
                 for player in self.player:
                     player.draw_in(self.draw_deck.draw_out())   # move card into player
 
-                    self.draw_card()   # draw player's card & draw deck 
+                    self.draw_ui()()   # draw player's card & draw deck 
                     pygame.display.update()   
 
                     pygame.time.delay(200)  # delay for animate
 
                 self.game_state += 1
 
-                    
-
-
             elif self.game_state == 3:
                 #print ("state3")
                 pygame.time.delay(1000)
-                if self.player[-1].is_pok():
+                if self.player[-1].is_pok(): # host pok
                     self.game_state = 6
+                elif self.player[3].is_pok():   # player pok
+                    self.game_state += 2
                 else:
 
                     self.game_state += 1
@@ -440,7 +441,7 @@ class Pok_Game_Menu(Menu):
                         player.draw_in(self.draw_deck.draw_out())
                     elif i!=3 and player.is_draw():
                         player.draw_in(self.draw_deck.draw_out())
-                    self.draw_card()   # draw player's card & draw deck 
+                    self.draw_ui()()   # draw player's card & draw deck 
                     pygame.display.update()   
 
                     pygame.time.delay(200)  # delay for animate
@@ -448,11 +449,12 @@ class Pok_Game_Menu(Menu):
                     i += 1   
                 self.game_state += 1
 
-            elif self.game_state == 2:
+            elif self.game_state == 6 and not self.is_collected_stats:
                 #print ("state6")
-                print(end="")
+                self.is_collected_stats = True
 
-            self.draw_card()    # draw player's card & draw deck 
+
+            self.draw_ui()()    # draw player's card & draw deck  msg button
 
             # input - output
             for event in pygame.event.get():
@@ -484,6 +486,7 @@ class Pok_Game_Menu(Menu):
                         self.draw_deck = Deck()
                         # reset value
                         self.is_draw = None
+                        self.is_collected_stats = False
                         
                         # clear card on player's hand
                         for player in self.player:
@@ -512,12 +515,11 @@ class Pok_Game_Menu(Menu):
 
                 # finish Button (static display)
                 if is_hit_box(mouse_pos,self.exit_button[0], self.exit_button[1]):
-                    print ("back")
                     if clickdown:
                         return 0
 
 
-    def draw_card(self): # draw player's card & draw deck 
+    def draw_ui(self): # draw player's card & draw deck msg button
         show=False
         if self.game_state == 6:
             show = True
@@ -528,9 +530,7 @@ class Pok_Game_Menu(Menu):
             else:
                 player.draw_hand(self.player_pos[i],show)
             i+=1
-    
 
-    def draw_ui(self):
         # start button
         if self.game_state == 6:
             window.blit(pygame.transform.scale(loaded_image.start, (150,70)), self.start_button[0])
@@ -545,6 +545,16 @@ class Pok_Game_Menu(Menu):
 
         # exit button
         window.blit(pygame.transform.scale(loaded_image.exit, (150,70)), self.exit_button[0])
+
+        # Host msg
+        font_size = pygame.font.SysFont("arial",60)
+        msg = font_size.render("Host", True, (0,0,0),(255,215,0))
+        window.blit(pygame.transform.scale(msg, (100,40)), (350,175))
+        
+        # Player msg
+        msg = font_size.render("Player", True, (0,0,0),(255,215,0))
+        window.blit(pygame.transform.scale(msg, (100,40)), (350,385))
+        
 
 # Mechanic ======================= Mechanic
 
@@ -1122,7 +1132,7 @@ def main():
             
         elif go == 2:
             # stop main music theme
-            pygame.mixer.music.stop()
+            #pygame.mixer.music.stop()
             menu.restart_pok()  # clear old game data before start new game
             go = menu.pok()
 
