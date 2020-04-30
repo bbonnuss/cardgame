@@ -377,6 +377,8 @@ class Pok_Game_Menu(Menu):
         self.draw_deck = Deck()
         self.is_draw = None
         self.is_collected_stats = False
+        self.result = [0, 0, 0, 0, 0, 0, 0, 0]
+        # result
         self.stats = [0, 0, 0, 0, 0, 0, 0, 0, ] # win, lose, draw, pok9, pok8, tong, reung, krowb
         self.player = [Bot(), Bot(), Bot(), Player(), Bot(), Bot(), Bot(), Bot()] # Bot ตัวสุดท้ายเป็น host
         self.player_pos = [(225, 150), (100, 300), (225, 450), (400, 500), (575, 450), (700, 300), (575, 150), (400, 100)]
@@ -525,10 +527,10 @@ class Pok_Game_Menu(Menu):
         for player in self.player:
             if player.is_pok():
                 player.draw_hand(self.player_pos[i],True)
-                player.draw_result(self.player_pos[i],True)
+                self.result[i] = player.draw_result(self.player_pos[i],True)
             else:
                 player.draw_hand(self.player_pos[i],show)
-                player.draw_result(self.player_pos[i],show)
+                self.result[i] = player.draw_result(self.player_pos[i],show)
             i+=1
 
         # start button
@@ -552,10 +554,19 @@ class Pok_Game_Menu(Menu):
         window.blit(pygame.transform.scale(msg, (100,40)), (350,175))
         
         # Player msg
-        msg = font_size.render("Player", True, (0,0,0),(255,215,0))
+        msg = font_size.render(" You ", True, (0,0,0),(255,215,0))
         window.blit(pygame.transform.scale(msg, (100,40)), (350,385))
         
-        # pok
+        # result msg
+        if self.game_state == 6 and self.result[3] > self.result[7]:
+            msg = font_size.render("You Win", True, (0,0,0),(0,191,255))
+            window.blit(pygame.transform.scale(msg, (100,40)), (350,280))
+        elif self.game_state == 6 and self.result[3] < self.result[7]:
+            msg = font_size.render("You Lose", True, (0,0,0),(0,191,255))
+            window.blit(pygame.transform.scale(msg, (100,40)), (350,280))
+        elif self.game_state == 6 and self.result[3] == self.result[7]:
+            msg = font_size.render("  Draw  ", True, (0,0,0),(0,191,255))
+            window.blit(pygame.transform.scale(msg, (100,40)), (350,280))
 
 # Mechanic ======================= Mechanic
 
@@ -974,7 +985,7 @@ class Player():
         self.deng2 = False
         self.deng3 = False
     
-    def draw_result(self, pos, show):
+    def draw_result(self, pos, show): # also calculate and return result
 
         msg_resolution = (200,40)    
         left_top_pos = (pos[0]-(msg_resolution[0]/2),pos[1]-msg_resolution[1]/2)
@@ -984,7 +995,7 @@ class Player():
                 self.deng2 = True
                 msg = font_size.render("Pok 9 Double", True, (0,0,0),(255,140,0))
             else:
-                msg = font_size.render("   Pok 9   ", True, (0,0,0),(255,140,0))
+                msg = font_size.render("    Pok 9    ", True, (0,0,0),(255,140,0))
             
 
         elif self.is_pok8():
@@ -1014,6 +1025,7 @@ class Player():
         
         if show or not self.bot:
             window.blit(pygame.transform.scale(msg, msg_resolution), left_top_pos)
+        return self.result
             
 
 
@@ -1077,7 +1089,6 @@ class Player():
 
         suit_list = self.get_suit()
         for i in range(0,self.num-1,1):
-            print (suit_list[i], suit_list[i+1])      # debug  
             if suit_list[i] != suit_list[i+1]:
                 return False
         return True              
