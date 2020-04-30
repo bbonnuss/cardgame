@@ -376,7 +376,7 @@ class Pok_Game_Menu(Menu):
         self.draw_deck = Deck()
         self.is_draw = None
         self.player = [Bot(), Bot(), Bot(), Player(), Bot(), Bot(), Bot(), Bot()] # Bot ตัวสุดท้ายเป็น host
-        self.player_pos = [(200, 200), (100, 300), (200, 400), (400, 500), (600, 400), (700, 300), (600, 200), (400, 100)]
+        self.player_pos = [(225, 150), (100, 300), (225, 450), (400, 500), (575, 450), (700, 300), (575, 150), (400, 100)]
         # game_state 
         # 1 = draw 1
         # 2 = draw 2
@@ -410,7 +410,7 @@ class Pok_Game_Menu(Menu):
 
             # game process
             if self.game_state == 1 or self.game_state == 2:
-                print ("state2")
+                #print ("state2")
                 for player in self.player:
                     player.draw_in(self.draw_deck.draw_out())   # move card into player
 
@@ -425,13 +425,16 @@ class Pok_Game_Menu(Menu):
 
 
             elif self.game_state == 3:
-                print ("state3")
+                #print ("state3")
                 pygame.time.delay(1000)
+                if self.player[-1].is_pok:
+                    self.game_state = 6
+                else:
 
-                self.game_state += 1
+                    self.game_state += 1
 
             elif self.game_state == 5:
-                print ("state5")
+                #print ("state5")
                 i=0
                 for player in self.player:
                     if i==3 and self.is_draw :
@@ -447,7 +450,8 @@ class Pok_Game_Menu(Menu):
                 self.game_state += 1
 
             elif self.game_state == 2:
-                print ("state6")
+                #print ("state6")
+                print(end="")
 
             self.draw_card()    # draw player's card & draw deck 
 
@@ -456,7 +460,7 @@ class Pok_Game_Menu(Menu):
 
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
-                print (mouse_pos)
+                #print (mouse_pos)
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     clickdown = True
@@ -515,9 +519,15 @@ class Pok_Game_Menu(Menu):
 
 
     def draw_card(self): # draw player's card & draw deck 
+        show=False
+        if self.game_state == 6:
+            show = True
         i=0
         for player in self.player:
-            player.draw_hand(self.player_pos[i],False)
+            if player.is_pok():
+                #show = True
+                print(end="")
+            player.draw_hand(self.player_pos[i],show)
             i+=1
     
 
@@ -955,8 +965,8 @@ class Player():
     def draw_hand(self, pos, show):
         # pos = tuple : center of location to draw (x,y)
         # show = bool : true=show front card / false=show back card
-        overlap_per_card = 30 # pixel
-        card_resolution = (124,180)
+        overlap_per_card = 20 # pixel
+        card_resolution = (int(124*.8),int(180*.8))
         card_horizon = card_resolution[0]
         card_verical = card_resolution[1]
         full_horizon = card_horizon+((self.num-1)*overlap_per_card)    #card1 + 20 + 20 = full horizon pixel 
@@ -964,7 +974,7 @@ class Player():
         card_pos = (pos[0]-(full_horizon/2),pos[1]-full_verical/2)
 
         for card in self.hand_card:
-            if show:
+            if show or not self.bot:
                 # draw
                 window.blit(pygame.transform.scale(card.get_image(), card_resolution), card_pos)
             else:
@@ -992,7 +1002,6 @@ class Player():
 
         if point >= 10:
             point %= 10
-
         return point
 
 
