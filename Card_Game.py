@@ -981,7 +981,7 @@ class Player():
         left_top_pos = (pos[0]-(msg_resolution[0]/2),pos[1]-msg_resolution[1]/2)
         font_size = pygame.font.SysFont("arial",60)
         if self.is_pok9():
-            if self.is_flood():
+            if self.is_flood() or self.is_double():
                 self.deng2 = True
                 msg = font_size.render("Pok 9 Double", True, (0,0,0),(255,140,0))
             else:
@@ -989,7 +989,7 @@ class Player():
             
 
         elif self.is_pok8():
-            if self.is_flood():
+            if self.is_flood() or self.is_double():
                 self.deng2 = True
                 msg = font_size.render("Pok 8 Double", True, (0,0,0),(255,140,0))
             else:
@@ -1005,7 +1005,7 @@ class Player():
         else:
             self.result = self.get_point()
             msg_str = "   "+str(self.get_point())+" Points   "
-            if self.is_flood() and self.num == 2:
+            if (self.is_flood()  or self.is_double()) and self.num == 2 :
                 self.deng2 = True
                 msg_str = str(self.get_point())+" Points Double"
             elif self.is_flood() and self.num == 3:
@@ -1160,6 +1160,14 @@ class Player():
                     self.result = 10
                     return True
         return False
+
+    def is_double(self):
+        if self.num == 2:
+            num_list = self.get_num()
+            for i in range(0,self.num-1,1):
+                if num_list[i] != num_list[i+1]:
+                    return False
+            return True 
 
     
 class Bot(Player):
