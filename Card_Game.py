@@ -376,12 +376,9 @@ class Pok_Game_Menu(Menu):
         self.game_state = 1
         self.draw_deck = Deck()
         self.is_draw = None
-        self.is_collected_stats = False
-        self.result = [0, 0, 0, 0, 0, 0, 0, 0]
-        # result
-        self.stats = [0, 0, 0, 0, 0, 0, 0, 0, ] # win, lose, draw, pok9, pok8, tong, reung, krowb
+        self.result = [0, 0, 0, 0, 0, 0, 0, 0] # result ตัวสุดท้ายเป็น host
         self.player = [Bot(), Bot(), Bot(), Player(), Bot(), Bot(), Bot(), Bot()] # Bot ตัวสุดท้ายเป็น host
-        self.player_pos = [(225, 150), (100, 300), (225, 450), (400, 500), (575, 450), (700, 300), (575, 150), (400, 100)]
+        self.player_pos = [(225, 150), (100, 300), (225, 450), (400, 500), (575, 450), (700, 300), (575, 150), (400, 100)] # ตพแหน่งวางการ์ด
         # game_state 
         # 1 = draw 1
         # 2 = draw 2
@@ -450,12 +447,6 @@ class Pok_Game_Menu(Menu):
 
                     i += 1   
                 self.game_state += 1
-
-            elif self.game_state == 6 and not self.is_collected_stats:
-                #print ("state6")
-                self.is_collected_stats = True
-
-
 
             self.draw_ui()    # draw player's card & draw deck  msg button
 
@@ -560,13 +551,13 @@ class Pok_Game_Menu(Menu):
         # result msg
         if self.game_state == 6 and self.result[3] > self.result[7]:
             msg = font_size.render("You Win", True, (0,0,0),(0,191,255))
-            window.blit(pygame.transform.scale(msg, (100,40)), (350,280))
+            window.blit(pygame.transform.scale(msg, (160,80)), (320,260))
         elif self.game_state == 6 and self.result[3] < self.result[7]:
             msg = font_size.render("You Lose", True, (0,0,0),(0,191,255))
-            window.blit(pygame.transform.scale(msg, (100,40)), (350,280))
+            window.blit(pygame.transform.scale(msg, (160,80)), (320,260))
         elif self.game_state == 6 and self.result[3] == self.result[7]:
             msg = font_size.render("  Draw  ", True, (0,0,0),(0,191,255))
-            window.blit(pygame.transform.scale(msg, (100,40)), (350,280))
+            window.blit(pygame.transform.scale(msg, (160,80)), (320,260))
 
 # Mechanic ======================= Mechanic
 
@@ -986,7 +977,6 @@ class Player():
         self.deng3 = False
     
     def draw_result(self, pos, show): # also calculate and return result
-
         msg_resolution = (200,40)    
         left_top_pos = (pos[0]-(msg_resolution[0]/2),pos[1]-msg_resolution[1]/2)
         font_size = pygame.font.SysFont("arial",60)
