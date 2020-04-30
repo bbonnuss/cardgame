@@ -488,10 +488,7 @@ class Pok_Game_Menu(Menu):
                         # reset value
                         self.is_draw = None
                         self.is_collected_stats = False
-                        
-                        # clear card on player's hand
-                        for player in self.player:
-                            player.clear_hand()
+                        self.player = [Bot(), Bot(), Bot(), Player(), Bot(), Bot(), Bot(), Bot()] # Bot ตัวสุดท้ายเป็น host
                         
                 
                 #  draw Button
@@ -528,8 +525,10 @@ class Pok_Game_Menu(Menu):
         for player in self.player:
             if player.is_pok():
                 player.draw_hand(self.player_pos[i],True)
+                player.draw_result(self.player_pos[i],True)
             else:
                 player.draw_hand(self.player_pos[i],show)
+                player.draw_result(self.player_pos[i],show)
             i+=1
 
         # start button
@@ -973,42 +972,47 @@ class Player():
         self.num = 0
         self.result = 0
         self.deng2 = False
-        self.deng3
+        self.deng3 = False
     
     def draw_result(self, pos, show):
 
-        msg_resolution = (100,40)    
+        msg_resolution = (200,40)    
         left_top_pos = (pos[0]-(msg_resolution[0]/2),pos[1]-msg_resolution[1]/2)
+        font_size = pygame.font.SysFont("arial",60)
         if self.is_pok9():
             if self.is_flood():
-                msg = font_size.render("ป้อก 9 สองเด้ง", True, (0,0,0),(255,215,0))
+                self.deng2 = True
+                msg = font_size.render("Pok 9 Double", True, (0,0,0),(255,140,0))
             else:
-                msg = font_size.render("ป้อก 9", True, (0,0,0),(255,215,0))
+                msg = font_size.render("Pok 9", True, (0,0,0),(255,140,0))
             
 
         elif self.is_pok8():
             if self.is_flood():
-                msg = font_size.render("ป้อก 8 สองเด้ง", True, (0,0,0),(255,215,0))
+                self.deng2 = True
+                msg = font_size.render("Pok 8 Double", True, (0,0,0),(255,140,0))
             else:
-                msg = font_size.render("ป้อก 8", True, (0,0,0),(255,215,0))
+                msg = font_size.render("Pok 8", True, (0,0,0),(255,140,0))
 
         elif self.is_tong():
-            msg = font_size.render("ตอง "+str(self.get_point), True, (0,0,0),(255,215,0))
+            msg = font_size.render("Three of a kind "+str(self.get_point), True, (0,0,0),(255,140,0))
 
-        elif self.is_straight_flood()
-            msg = font_size.render("เรียง "+str(self.hand_card[0].get_num())+str(self.hand_card[1].get_num())+str(self.hand_card[2].get_num()), True, (0,0,0),(255,215,0))
+        elif self.is_straight_flood():
+            msg = font_size.render("Straight Flood "+str(self.hand_card[0].get_num())+str(self.hand_card[1].get_num())+str(self.hand_card[2].get_num()), True, (0,0,0),(255,140,0))
         elif self.is_close():
-            msg = font_size.render("ขอบ", True, (0,0,0),(255,215,0))
+            msg = font_size.render("    Edge    ", True, (0,0,0),(255,140,0))
         else:
             self.result = self.get_point()
-            msg_str = str(self.get_point)+"แต้ม"
+            msg_str = str(self.get_point())+"Points"
             if self.is_flood() and self.num == 2:
-                msg_str += " สองเด้ง"
+                self.deng2 = True
+                msg_str += " Double"
             elif self.is_flood() and self.num == 3:
-                msg_str += " สามเด้ง"
-            msg = font_size.render(msg_str, True, (0,0,0),(255,215,0))
+                self.deng3 = True
+                msg_str += " Triple"
+            msg = font_size.render(msg_str, True, (0,0,0),(255,140,0))
         
-        if show:
+        if show or not self.bot:
             window.blit(pygame.transform.scale(msg, msg_resolution), left_top_pos)
             
 
@@ -1074,6 +1078,7 @@ class Player():
         for i in range(0,self.num-1,1):
             if suit_list[i] != suit_list[i+1]:
                 return False
+                
         return True              
 
 
@@ -1082,7 +1087,7 @@ class Player():
         suit = list()
         i=0
         for card in self.hand_card:
-            suit[i] = card.get_suit()
+            suit.append(card.get_suit())
             i += 1
         return suit
     
@@ -1092,7 +1097,7 @@ class Player():
         num = list()
         i=0
         for card in self.hand_card:
-            num[i] = card.get_num()
+            num.append(card.get_num())
             i += 1
         return num
 
@@ -1149,8 +1154,9 @@ class Player():
     def is_close(self): # ขอบ
         if self.num == 3:
             if self.hand_card[0].is_char() and self.hand_card[1].is_char() and self.hand_card[2].is_char():
-                self.result = 10
-                return True
+                if self.get_point() == 0:
+                    self.result = 10
+                    return True
         return False
 
     
