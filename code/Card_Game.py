@@ -401,7 +401,6 @@ class Pok_Game_Menu(Menu):
         while True:
             # loop per second 
             clock.tick(50)
-            print(self.game_state)
             
             self.draw_bg()      # draw_bg
             self.draw_card()    # draw player's card & draw deck 
@@ -427,7 +426,7 @@ class Pok_Game_Menu(Menu):
             elif self.game_state == 3:
                 #print ("state3")
                 pygame.time.delay(1000)
-                if self.player[-1].is_pok:
+                if self.player[-1].is_pok():
                     self.game_state = 6
                 else:
 
@@ -525,9 +524,9 @@ class Pok_Game_Menu(Menu):
         i=0
         for player in self.player:
             if player.is_pok():
-                #show = True
-                print(end="")
-            player.draw_hand(self.player_pos[i],show)
+                player.draw_hand(self.player_pos[i],True)
+            else:
+                player.draw_hand(self.player_pos[i],show)
             i+=1
     
 
@@ -537,7 +536,7 @@ class Pok_Game_Menu(Menu):
             window.blit(pygame.transform.scale(loaded_image.start, (150,70)), self.start_button[0])
 
         
-        if self.game_state == 4:
+        if self.game_state == 4 and (not self.player[3].is_pok()):
             # draw_button
             window.blit(pygame.transform.scale(loaded_image.draw, (150,70)), self.draw_button[0])
 
@@ -985,8 +984,8 @@ class Player():
 
     def draw_in(self, card):
         self.hand_card.append(card)
-        self.num += 1
         self.hand_card.sort(key=lambda x: x.get_num())
+        self.num += 1
     
 
     def clear_hand(self):
